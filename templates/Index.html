@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modelo de predicción de Bitcoin</title>
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+  <style>
+    body {
+      background-color: #f8f9fa; /* Color de fondo */
+   color: #001f3f; /* Nuevo color del texto (dark blue) */
+    }
+
+    .container {
+      background-color: #ffffff; /* Color del contenedor principal */
+      border-radius: 10px; /* Bordes redondeados */
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+      padding: 20px;
+      margin-top: 50px;
+    }
+
+    .nav-tabs .nav-link {
+      color: #007bff; /* Color del texto de las pestañas */
+    }
+
+    .nav-tabs .nav-link.active {
+      background-color: #ffffff; /* Color de fondo de la pestaña activa */
+      border-color: #dee2e6 #dee2e6 #ffffff; /* Colores del borde */
+    }
+
+    h1, h2 {
+        font-family: sans-serif;
+    font-weight: bold;
+    text-align: center;
+    color: #0074cc; /* Nuevo color para los títulos (blue) */
+    }
+
+
+    img {
+      max-width: 100%;
+    }
+  </style>
+</head>
+<body>
+<div class="container mt-5">
+
+  <h1 class="text-center mb-4">Modelo de predicción de Bitcoin</h1>
+<img src="image.png" alt="Imagen destacada" class="img-fluid mx-auto d-block" style="max-width: 80%; height: auto;">
+
+
+
+<br>  <br/>
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" id="myTabs" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="description-tab" data-toggle="tab" href="#description" role="tab" aria-controls="description" aria-selected="true">Descripción</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="implementation-tab" data-toggle="tab" href="#implementation" role="tab" aria-controls="implementation" aria-selected="false">Implementación</a>
+        </li>
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content mt-2">
+        <!-- Descripción Tab -->
+        <div class="tab-pane fade show active" id="description" role="tabpanel" aria-labelledby="description-tab">
+            <h2>Descripción de Campos</h2>
+            <p><strong>Fecha:</strong> La fecha en la que se registra el dato.</p>
+            <p><strong>Precio de Apertura:</strong> El precio de apertura diario del Bitcoin.</p>
+            <p><strong>Precio Máximo:</strong> El precio más alto alcanzado por el Bitcoin en el día.</p>
+            <p><strong>Precio Mínimo:</strong> El precio más bajo alcanzado por el Bitcoin en el día.</p>
+            <p><strong>Precio de Cierre:</strong> El precio de cierre diario del Bitcoin.</p>
+            <p><strong>Volumen de Bitcoin:</strong> El volumen de Bitcoin negociado.</p>
+            <p><strong>Volumen en USD:</strong> El volumen de Bitcoin negociado expresado en dólares estadounidenses.</p>
+            <p><strong>Media Móvil de 30 Días:</strong> El valor promedio de los precios de cierre en los últimos 30 días.</p>
+            <p><strong>Volatilidad Diaria:</strong> La volatilidad diaria calculada como el cambio porcentual del precio de cierre en un período de 30 días.</p>
+        </div>
+
+        <!-- Implementación Tab -->
+        <div class="tab-pane fade" id="implementation" role="tabpanel" aria-labelledby="implementation-tab">
+            <h2>Implementación del Modelo de Predicción de Bitcoin</h2>
+            <!-- Agrega información relacionada con la implementación aquí -->
+            <h1>Realizar Predicción</h1>
+
+          <div>
+              <label for="historial">Historial de Precios:</label>
+              <input type="textbox" id="historial" placeholder="Ingrese el historial de precios">
+              <button onclick="realizarPrediccion()">Realizar Predicción</button>
+          </div>
+
+          <div id="resultado"></div>
+
+          <script>
+              async function realizarPrediccion() {
+                   // Obtener el historial de precios del input
+                  const historialPreciosInput = document.getElementById('historial').value;
+
+                  // Convertir el string de precios a una lista de números
+                  const historialPrecios = historialPreciosInput.split(',').map(parseFloat);
+
+                  // Verificar si hay exactamente 60 precios
+                  //if (historialPrecios.length !== 60) {
+                  //  alert('Ingrese exactamente 60 precios.');
+                  //  return;
+                  //}
+
+                  // Crear un objeto con los datos a enviar
+                  const data = {
+                    historial_precios: historialPrecios
+                  };
+                  // Realizar la solicitud POST a la API
+                  const response = fetch('http://127.0.0.1:8000/realizar_prediccion', {
+                      method: 'POST',
+                      headers: {
+                          'Content-Type': 'application/json',
+                      },
+                      body: JSON.stringify(data),
+                  });
+
+                  // Verificar si la solicitud fue exitosa (código de respuesta 200)
+                  if (!response.ok) {
+                      const error = await response.json();
+                      console.error('Error en la solicitud:', error);
+                      return;
+                  }
+
+                  // Obtener la respuesta JSON
+                  const result = await response.json();
+
+                  // Mostrar el resultado en el HTML
+                  document.getElementById('resultado').innerText = `Predicción: ${result.prediccion}`;
+              }
+          </script>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS y dependencias -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>

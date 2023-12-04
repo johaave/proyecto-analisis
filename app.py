@@ -1,12 +1,12 @@
 from flask import Flask, request, render_template
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder="templates")
 
 #http://127.0.0.1:5000
 
 @app.route('/')
 def raiz():
-    return render_template('index.html')
+    return render_template('Index.html')
 
 #@app.route('/realizar_prediccion', methods=['POST'])
 #async def realizar_prediccion(data: InputData):
